@@ -1,17 +1,13 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: digital
- * Date: 05/02/2018
- * Time: 16:25
- */
 
 namespace AppBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ORM\Entity
+ * @ORM\Table(name="s_show")
  */
 
 class Show
@@ -24,31 +20,39 @@ class Show
     private $id;
     /**
      * @ORM\Column
+     * @Assert\NotBlank(message = "Please provide name for the show")
     */
     private $name;
     /**
      * @ORM\Column(type="text")
+     * @Assert\NotBlank(message = "Please provide abstract for the show")
      */
     private $abstract;
     /**
      * @ORM\Column
+     * @Assert\NotBlank(message = "Please provide country for the show")
      */
     private $country;
     /**
      * @ORM\Column
+     * @Assert\NotBlank(message = "Please provide author for the show")
      */
     private $author;
     /**
      * @ORM\Column(type="date")
+     * @Assert\NotBlank(message = "Please provide release date for the show")
      */
     private $releaseDate;
     /**
      * @ORM\Column
+     * @Assert\Image(minHeight=300, minWidth=750)
+     *
      */
     private $mainPicture;
     /**
      * @ORM\ManyToOne(targetEntity="Category")
      * @ORM\JoinColumn(name="category_id", referencedColumnName="id")
+     * @Assert\NotBlank(message = "Please provide category for the show")
      */
     private $category;
 

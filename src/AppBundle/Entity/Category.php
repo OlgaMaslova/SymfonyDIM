@@ -1,17 +1,13 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: digital
- * Date: 05/02/2018
- * Time: 16:26
- */
 
 namespace AppBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 
 /**
  * @ORM\Entity
+ * @UniqueEntity("name", message="{{ value }} is already in database")
  */
 
 class Category
@@ -24,7 +20,7 @@ class Category
     private $id;
 
     /**
-     * @ORM\Column(type="string")
+     * @ORM\Column(type="string", unique=true)
      */
     private $name;
 

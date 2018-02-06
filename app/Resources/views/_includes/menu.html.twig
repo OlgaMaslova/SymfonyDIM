@@ -15,6 +15,9 @@
                 <li class="nav-item {% if (app.request.attributes.get('_route')) == 'show_create' %}active{%  endif %}">
                     <a class="nav-link" href="{{ path('show_create') }}">Create</a>
                 </li>
+                <li class="nav-item {% if (app.request.attributes.get('_route')) == 'category_create' %}active{%  endif %}">
+                    <a class="nav-link" href="{{ path('category_create') }}">Create category</a>
+                </li>
             </ul>
         </div>
     </div>

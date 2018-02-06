@@ -31,6 +31,12 @@ class ShowController extends Controller
         $form->handleRequest($request);
 
         if ($form->isValid()) {
+            $generatedFileName = time().'_'.$show->getCategory()->getName().'.'.$show->getMainPicture()->guessClientExtension();
+            $path = $this->getParameter('kernel.project_dir').'/web'.$this->getParameter('upload_directory_file');
+
+            $show->getMainPicture()->move($path, $generatedFileName);
+
+            $show->setMainPicture($generatedFileName);
 
             $em = $this->getDoctrine()->getManager(); //get Entity Manager (pattern), clear even if uses flush
             $em->persist($show); //Persist  - new record, only flush - object exists already
