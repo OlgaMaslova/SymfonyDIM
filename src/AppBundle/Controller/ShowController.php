@@ -2,6 +2,7 @@
 
 namespace AppBundle\Controller;
 
+use AppBundle\Entity\Show;
 use AppBundle\Type\ShowType;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
@@ -22,9 +23,25 @@ class ShowController extends Controller
     /**
      * @Route("/create", name="create")
      */
-    public function createAction()
+    public function createAction(Request $request)
     {
-        $form = $this->createForm(ShowType::class);
+        $show = new Show();
+        $form = $this->createForm(ShowType::class, $show);
+
+        $form->handleRequest($request);
+
+        if ($form->isValid()) {
+
+            $em = $this->getDoctrine()->getManager(); //get Entity Manager (pattern), clear even if uses flush
+            $em->persist($show); //Persist  - new record, only flush - object exists already
+            $em->flush();
+
+            // upload file
+            // Save
+            $this->addFlash('success', 'You successfully added a new show!');
+
+            return $this->redirectToRoute('show_list');
+        }
 
         return $this->render('show/createShow.html.twig', ['showForm' => $form->createView()]);
     }

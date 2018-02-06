@@ -11,6 +11,7 @@ namespace AppBundle\Type;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\CountryType;
 use Symfony\Component\Form\Extension\Core\Type\FileType;
+use Symfony\Component\Form\Extension\Core\Type\DateType;
 use Symfony\Component\Form\FormBuilderInterface;
 
 class ShowType extends AbstractType
@@ -23,7 +24,7 @@ class ShowType extends AbstractType
             ->add('abstract')
             ->add('country', CountryType::class)
             ->add('author')
-            ->add('releaseDate')
+            ->add('releaseDate', DateType::class)
             ->add('mainPicture', FileType::class)
         ;
     }

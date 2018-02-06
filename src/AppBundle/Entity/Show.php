@@ -136,7 +136,7 @@ class Show
     /**
      * @param mixed $releaseDate
      */
-    public function setReleaseDate($releaseDate)
+    public function setReleaseDate(\DateTime $releaseDate)
     {
         $this->releaseDate = $releaseDate;
     }
