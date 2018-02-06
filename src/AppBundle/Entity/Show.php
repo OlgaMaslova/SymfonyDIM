@@ -20,39 +20,41 @@ class Show
     private $id;
     /**
      * @ORM\Column
-     * @Assert\NotBlank(message = "Please provide name for the show")
+     * @Assert\NotBlank(message = "Please provide name for the show", groups={"create", "update"})
     */
     private $name;
     /**
      * @ORM\Column(type="text")
-     * @Assert\NotBlank(message = "Please provide abstract for the show")
+     * @Assert\NotBlank(message = "Please provide abstract for the show", groups={"create", "update"})
      */
     private $abstract;
     /**
      * @ORM\Column
-     * @Assert\NotBlank(message = "Please provide country for the show")
+     * @Assert\NotBlank(message = "Please provide country for the show", groups={"create", "update"})
      */
     private $country;
     /**
      * @ORM\Column
-     * @Assert\NotBlank(message = "Please provide author for the show")
+     * @Assert\NotBlank(message = "Please provide author for the show", groups={"create", "update"})
      */
     private $author;
     /**
      * @ORM\Column(type="date")
-     * @Assert\NotBlank(message = "Please provide release date for the show")
+     * @Assert\NotBlank(message = "Please provide release date for the show", groups={"create", "update"})
      */
     private $releaseDate;
     /**
      * @ORM\Column
-     * @Assert\Image(minHeight=300, minWidth=750)
+     * @Assert\Image(minHeight=300, minWidth=750, groups={"create"})
      *
      */
     private $mainPicture;
+
+    private $tmpPicture;
     /**
      * @ORM\ManyToOne(targetEntity="Category")
      * @ORM\JoinColumn(name="category_id", referencedColumnName="id")
-     * @Assert\NotBlank(message = "Please provide category for the show")
+     * @Assert\NotBlank(message = "Please provide category for the show", groups={"create", "update"})
      */
     private $category;
 
@@ -176,6 +178,23 @@ class Show
     {
         $this->category = $category;
     }
+
+    /**
+     * @return mixed
+     */
+    public function getTmpPicture()
+    {
+        return $this->tmpPicture;
+    }
+
+    /**
+     * @param mixed $tmpPicture
+     */
+    public function setTmpPicture($tmpPicture)
+    {
+        $this->tmpPicture = $tmpPicture;
+    }
+
 
 
 }

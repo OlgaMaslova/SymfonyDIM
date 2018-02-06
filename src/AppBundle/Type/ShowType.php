@@ -23,10 +23,10 @@ class ShowType extends AbstractType
                 'choice_label' => 'name',
             ))
             ->add('abstract')
-            ->add('country', CountryType::class, ['preferred_choices'=>array('FR', 'US')])
+            ->add('country', CountryType::class, ['preferred_choices'=>array('FR', 'US')]) //preferred countries
             ->add('author')
             ->add('releaseDate', DateType::class)
-            ->add('mainPicture', FileType::class)
+            ->add('tmpPicture', FileType::class, ['label'=>'Main Picture'])
         ;
     }
 }

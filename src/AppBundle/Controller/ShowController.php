@@ -3,6 +3,7 @@
 namespace AppBundle\Controller;
 
 use AppBundle\Entity\Show;
+use AppBundle\File\FileUploader;
 use AppBundle\Type\ShowType;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
@@ -18,12 +19,13 @@ class ShowController extends Controller
      */
     public function listAction()
     {
-        return $this->render('show/list.html.twig');
+        $shows = $this->getDoctrine()->getManager()->getRepository('AppBundle\Entity\Show')->findAll();
+        return $this->render('show/list.html.twig', ['shows'=>$shows]);
     }
     /**
      * @Route("/create", name="create")
      */
-    public function createAction(Request $request)
+    public function createAction(Request $request, FileUploader $fileUploader)
     {
         $show = new Show();
         $form = $this->createForm(ShowType::class, $show);
@@ -31,10 +33,8 @@ class ShowController extends Controller
         $form->handleRequest($request);
 
         if ($form->isValid()) {
-            $generatedFileName = time().'_'.$show->getCategory()->getName().'.'.$show->getMainPicture()->guessClientExtension();
-            $path = $this->getParameter('kernel.project_dir').'/web'.$this->getParameter('upload_directory_file');
 
-            $show->getMainPicture()->move($path, $generatedFileName);
+            $generatedFileName = $fileUploader->upload($show->getMainPicture(), $show->getCategory()->getName());
 
             $show->setMainPicture($generatedFileName);
 
@@ -50,6 +50,25 @@ class ShowController extends Controller
         }
 
         return $this->render('show/createShow.html.twig', ['showForm' => $form->createView()]);
+    }
+
+    /**
+     * @Route("/update/{id}", name="update")
+     */
+    public function updateAction(Show $show, Request $request)
+    {
+        $showForm = $this->createForm(ShowType::class, $show, ['validation_groups' => ['update']]);
+
+        $showForm->handleRequest($request);
+
+        if ($showForm->isValid())
+        {
+            dump($show); die;
+            $this->addFlash('success', 'You successfully updated the show!');
+            return $this->redirectToRoute('show_list');
+        }
+
+        return $this->render('show/createShow.html.twig', ['showForm' => $showForm->createView()]);
     }
 
     public function categoriesAction()
