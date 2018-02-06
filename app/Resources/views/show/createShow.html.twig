@@ -4,5 +4,17 @@
 {% endblock %}
 
 {% block content %}
-    {{ form(showForm) }}
+    {#{{ form(showForm) }}#}
+
+    {{ form_start(showForm, {"attr": {"novalidate":"novalidate"}}) }}
+        {#{{ form_widget(showForm) }}#} {#to show whole Form at once#}
+        {#{{ form_row(showForm.name) }}#} {#to show only one row#}
+        {{ form_label(showForm.name) }}
+        {{ form_widget(showForm.name) }}
+        {{ form_errors(showForm.name) }}
+
+        {{ form_rest(showForm) }}
+
+        <input type="submit" value="Create" />
+    {{ form_end(showForm) }}
 {% endblock %}
