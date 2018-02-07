@@ -17,7 +17,7 @@ Make composer install the project's dependencies into vendor/
 
 `composer install`
 
-Create database with the name from parameters.yml->'database_name'
+Create database with the name indicated in parameters.yml->'database_name'
 
 `bin/console doctrine:database:create`
 
