@@ -23,7 +23,6 @@ class ShowController extends Controller
     public function listAction()
     {
         $shows = $this->getDoctrine()->getManager()->getRepository('AppBundle\Entity\Show')->findAll();
-        dump($shows);
         return $this->render('show/list.html.twig', ['shows'=>$shows]);
     }
     /**
@@ -35,8 +34,6 @@ class ShowController extends Controller
         $form = $this->createForm(ShowType::class, $show, ['validation_groups' => ['create']]);
 
         $form->handleRequest($request);
-
-        //dump($form);die;
 
         if ($form->isValid()) {
 
@@ -87,9 +84,11 @@ class ShowController extends Controller
 
     public function categoriesAction()
     {
+        $categories = $this->getDoctrine()->getManager()->getRepository('AppBundle\Entity\Category')->findAll();
         return $this->render('_includes/categories.html.twig',
             [
-            'categories' => ['Web Design', 'HTML', 'Freebies', 'Javascript', 'CSS', 'Tutorials']
+            'categories' => $categories
             ]);
     }
+
 }

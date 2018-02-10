@@ -9,7 +9,7 @@
                         <ul class="list-unstyled mb-0">
                 {%  endif %}
                 <li>
-                    <a href="#">{{ category }}</a>
+                    <a href="{{ path('category_list', { 'id': category.id }) }}">{{ category.name }}</a>
                 </li>
                 {% if (index%3) == 2  %}
                     </ul></div>

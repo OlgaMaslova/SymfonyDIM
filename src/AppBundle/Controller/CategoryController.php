@@ -36,4 +36,13 @@ class CategoryController extends Controller
         return $this->render('category/create.html.twig', ['categoryForm' => $form->createView()]);
 
     }
+    /**
+     * @Route("/{id}", name = "list", requirements={"id"="\d+"})
+     */
+    public function listAction($id)
+    {
+        $shows = $this->getDoctrine()->getManager()->getRepository('AppBundle\Entity\Show')->findBy(array('category' => $id));
+        return $this->render('show/list.html.twig', ['shows'=>$shows]);
+    }
+
 }
