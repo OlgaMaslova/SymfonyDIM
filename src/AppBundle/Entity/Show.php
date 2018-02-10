@@ -45,12 +45,14 @@ class Show
     private $releaseDate;
     /**
      * @ORM\Column
-     * @Assert\Image(minHeight=300, minWidth=750, groups={"create"})
+     * @Assert\NotBlank(message = "Please provide a picture", groups={"create", "update" })
+     * @Assert\Image(minHeight=300, minWidth=750, groups={"create", "update"})
      *
      */
     private $mainPicture;
 
-    private $tmpPicture;
+    private $mainPictureFileName;
+
     /**
      * @ORM\ManyToOne(targetEntity="Category")
      * @ORM\JoinColumn(name="category_id", referencedColumnName="id")
@@ -182,19 +184,18 @@ class Show
     /**
      * @return mixed
      */
-    public function getTmpPicture()
+    public function getMainPictureFileName()
     {
-        return $this->tmpPicture;
+        return $this->mainPictureFileName;
     }
 
     /**
-     * @param mixed $tmpPicture
+     * @param mixed $mainPictureFileName
      */
-    public function setTmpPicture($tmpPicture)
+    public function setMainPictureFileName($mainPictureFileName)
     {
-        $this->tmpPicture = $tmpPicture;
+        $this->mainPictureFileName = $mainPictureFileName;
     }
-
 
 
 }

@@ -8,7 +8,7 @@
     <!-- Blog Post -->
     {% for show in shows %}
     <div class="card mb-4">
-        <img class="card-img-top" src="{{ asset('upload/' ~ show.mainPicture) }}" alt="Card image cap">
+        <img class="card-img-top" src="{{ asset('upload/' ~ show.mainPictureFileName) }}" alt="Show image">
         <div class="card-body">
             <h2 class="card-title">{{ show.name }}</h2>
             <p class="card-text">{{ show.abstract }}</p>

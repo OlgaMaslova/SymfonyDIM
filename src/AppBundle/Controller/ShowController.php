@@ -5,9 +5,12 @@ namespace AppBundle\Controller;
 use AppBundle\Entity\Show;
 use AppBundle\File\FileUploader;
 use AppBundle\Type\ShowType;
+use AppBundle\EventListener\ShowUploadListener;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Component\HttpFoundation\File\File;
 use Symfony\Component\HttpFoundation\Request;
+
 
 /**
  * @Route(name="show_")
@@ -20,24 +23,28 @@ class ShowController extends Controller
     public function listAction()
     {
         $shows = $this->getDoctrine()->getManager()->getRepository('AppBundle\Entity\Show')->findAll();
+        dump($shows);
         return $this->render('show/list.html.twig', ['shows'=>$shows]);
     }
     /**
      * @Route("/create", name="create")
      */
-    public function createAction(Request $request, FileUploader $fileUploader)
+    public function createAction(Request $request)
     {
         $show = new Show();
-        $form = $this->createForm(ShowType::class, $show);
+        $form = $this->createForm(ShowType::class, $show, ['validation_groups' => ['create']]);
 
         $form->handleRequest($request);
 
+        //dump($form);die;
+
         if ($form->isValid()) {
 
+/*
             $generatedFileName = $fileUploader->upload($show->getMainPicture(), $show->getCategory()->getName());
 
             $show->setMainPicture($generatedFileName);
-
+*/
             $em = $this->getDoctrine()->getManager(); //get Entity Manager (pattern), clear even if uses flush
             $em->persist($show); //Persist  - new record, only flush - object exists already
             $em->flush();
@@ -55,15 +62,22 @@ class ShowController extends Controller
     /**
      * @Route("/update/{id}", name="update")
      */
-    public function updateAction(Show $show, Request $request)
+    public function updateAction(Show $show, Request $request, FileUploader $fileUploader)
     {
         $showForm = $this->createForm(ShowType::class, $show, ['validation_groups' => ['update']]);
-
         $showForm->handleRequest($request);
 
         if ($showForm->isValid())
         {
-            dump($show); die;
+/*
+            $generatedFileName = $fileUploader->upload($show->getMainPicture(), $show->getCategory()->getName());
+
+            $show->setMainPicture($generatedFileName);
+*/
+            $em = $this->getDoctrine()->getManager(); //get Entity Manager (pattern), clear even if uses flush
+            $em->persist($show); //Persist  - new record, only flush - object exists already
+            $em->flush();
+
             $this->addFlash('success', 'You successfully updated the show!');
             return $this->redirectToRoute('show_list');
         }

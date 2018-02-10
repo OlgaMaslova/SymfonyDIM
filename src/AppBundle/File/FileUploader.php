@@ -24,4 +24,9 @@ class FileUploader
 
         return $generatedFileName;
     }
+
+    public function getUploadDirectoryPath()
+    {
+        return $this->pathToProject.'/web'.$this->uploadDirectoryFile;
+    }
 }

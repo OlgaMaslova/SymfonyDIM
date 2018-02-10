@@ -34,6 +34,9 @@ services:
           arguments:
               $uploadDirectoryFile: '%upload_directory_file%'
               $pathToProject: '%kernel.project_dir%'
-    # AppBundle\Service\ExampleService:
-    #     arguments:
-    #         $someArgument: 'some_value'
+
+    AppBundle\EventListener\ShowUploadListener:
+            tags:
+                - { name: doctrine.event_listener, event: prePersist }
+                - { name: doctrine.event_listener, event: preUpdate }
+                - { name: doctrine.event_listener, event: postLoad }
