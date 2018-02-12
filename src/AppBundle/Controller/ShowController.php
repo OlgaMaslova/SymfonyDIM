@@ -4,6 +4,7 @@ namespace AppBundle\Controller;
 
 use AppBundle\Entity\Show;
 use AppBundle\File\FileUploader;
+use AppBundle\ShowFinder\ShowFinder;
 use AppBundle\Type\ShowType;
 use AppBundle\EventListener\ShowUploadListener;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
@@ -20,9 +21,21 @@ class ShowController extends Controller
     /**
      * @Route("/", name="list")
      */
-    public function listAction()
+    public function listAction(Request $request, ShowFinder $showFinder)
     {
-        $shows = $this->getDoctrine()->getManager()->getRepository('AppBundle\Entity\Show')->findAll();
+        $showRepository = $this->getDoctrine()->getManager()->getRepository('AppBundle:Show');
+        $session= $request->getSession();
+
+        if($session->has('query_search_shows')) {
+            $shows = $showFinder->searchByName($session->get('query_search_shows'));
+            dump($shows);die;
+
+            $request->getSession()->remove('query_search_shows');
+        } else {
+            $shows = $showRepository->findAll();
+        }
+
+        //$shows = $this->getDoctrine()->getManager()->getRepository('AppBundle\Entity\Show')->findAll();
         return $this->render('show/list.html.twig', ['shows'=>$shows]);
     }
     /**
@@ -91,4 +104,39 @@ class ShowController extends Controller
             ]);
     }
 
+    /**
+     * @Route("/search", name="search")
+     */
+
+    public function searchAction(Request $request)
+    {
+        $request->getSession()->set('query_search_shows', $request->request->get('query'));
+
+        return $this->redirectToRoute('show_list');
+    }
+
+    /**
+     * @Route("/delete", name="delete")
+     * @Method({"DELETE"})
+     */
+    /*
+    public function deleteAction(Request $request, CsrfTokenManagerInterface $csrfTokenManager)
+    {
+        $doctrine = $this->getDoctrine();
+        $showId = $request->request->get('show_id');
+        //$show = $this->getDoctrine()->getRepository('AppBundle:Show')->findOneBy(['id' => $showId]);
+        if (!$show = $doctrine->getRepository('AppBundle:Show')->findOneById($showId)) {
+            throw new NotFoundHttpException(sprintf('There is no show with the id %d', $showId));
+        }
+        $csrfToken = new CsrfToken('delete_show', $request->request->get('_csrf_token'));
+        if ($csrfTokenManager->isTokenValid($csrfToken)) {
+            $doctrine->getManager()->remove($show);
+            $doctrine->getManager()->flush();
+            $this->addFlash('success', 'The show have been successfully deleted.');
+        } else {
+            $this->addFlash('danger', 'Then csrf token is not valid. The deletion was not completed.');
+        }
+        return $this->redirectToRoute('show_list');
+    }
+*/
 }

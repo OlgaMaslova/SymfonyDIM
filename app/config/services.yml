@@ -40,3 +40,11 @@ services:
                 - { name: doctrine.event_listener, event: prePersist }
                 - { name: doctrine.event_listener, event: preUpdate }
                 - { name: doctrine.event_listener, event: postLoad }
+
+    AppBundle\ShowFinder\DBShowFinder:
+        tags: ['show.finder']
+
+    AppBundle\ShowFinder\OMDBShowFinder:
+        arguments:
+          $client: '@csa_guzzle.client.OMDB_api'
+        tags: ['show.finder']
