@@ -60,6 +60,8 @@ class Show
      */
     private $category;
 
+    private $dbSource;
+
 
     /**
      * @return mixed
@@ -196,6 +198,23 @@ class Show
     {
         $this->mainPictureFileName = $mainPictureFileName;
     }
+
+    /**
+     * @return mixed
+     */
+    public function getDbSource()
+    {
+        return $this->dbSource;
+    }
+
+    /**
+     * @param mixed $dbSource
+     */
+    public function setDbSource($dbSource)
+    {
+        $this->dbSource = $dbSource;
+    }
+
 
 
 }

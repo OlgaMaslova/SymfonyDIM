@@ -28,7 +28,14 @@ class ShowController extends Controller
 
         if($session->has('query_search_shows')) {
             $shows = $showFinder->searchByName($session->get('query_search_shows'));
-            dump($shows);die;
+
+            //if the show exists in local database we present only this one
+            if ($shows["Local Database"] != null) {
+                $shows = $shows["Local Database"];
+            } else {
+                $shows =array(0=>$shows["IMDB API"]);
+            }
+            //dump($shows);die;
 
             $request->getSession()->remove('query_search_shows');
         } else {

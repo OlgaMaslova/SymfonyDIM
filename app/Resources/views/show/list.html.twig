@@ -10,7 +10,7 @@
     <div class="card mb-4">
         <img class="card-img-top" src="{{ asset('upload/' ~ show.mainPictureFileName) }}" alt="Show image">
         <div class="card-body">
-            <h2 class="card-title">{{ show.name }}</h2>
+            <h2 class="card-title">{{ show.name ~ ' ' ~ show.dbSource}}</h2>
             <p class="card-text">{{ show.abstract }}</p>
             <a href="#" class="btn btn-primary">Read More &rarr;</a>
         </div>
