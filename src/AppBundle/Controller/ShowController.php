@@ -35,14 +35,12 @@ class ShowController extends Controller
             } else {
                 $shows =array(0=>$shows["IMDB API"]);
             }
-            //dump($shows);die;
 
             $request->getSession()->remove('query_search_shows');
         } else {
             $shows = $showRepository->findAll();
         }
 
-        //$shows = $this->getDoctrine()->getManager()->getRepository('AppBundle\Entity\Show')->findAll();
         return $this->render('show/list.html.twig', ['shows'=>$shows]);
     }
     /**

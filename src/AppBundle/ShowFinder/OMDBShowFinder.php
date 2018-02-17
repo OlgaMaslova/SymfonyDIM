@@ -33,6 +33,8 @@ class OMDBShowFinder implements ShowFinderInterface
         $show->setCountry($array["Country"]);
         $date = \DateTime::createFromFormat('d M Y', $array["Released"]);
         $show->setReleaseDate($date);
+
+        //save locally the poster in temporary file
         $image = imagecreatefromjpeg($array["Poster"]);
         $path = $this->fileUploader->getUploadDirectoryPath().'/tmp.jpg';
         imagejpeg($image, $path);
