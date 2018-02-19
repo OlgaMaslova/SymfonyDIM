@@ -36,8 +36,10 @@ class Show
      */
     private $country;
     /**
-     * @ORM\Column
+     *
      * @Assert\NotBlank(message = "Please provide author for the show", groups={"create", "update"})
+     * @ORM\ManyToOne(targetEntity="User", inversedBy="shows")
+     * @ORM\JoinColumn(name="user_id", referencedColumnName="id")
      */
     private $author;
     /**
@@ -135,7 +137,7 @@ class Show
     /**
      * @param mixed $author
      */
-    public function setAuthor($author)
+    public function setAuthor(User $author)
     {
         $this->author = $author;
     }

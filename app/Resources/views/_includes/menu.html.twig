@@ -13,18 +13,19 @@
                     </a>
                 </li>
                 <li class="nav-item {% if (app.request.attributes.get('_route')) == 'show_create' %}active{%  endif %}">
-                    <a class="nav-link" href="{{ path('show_create') }}">Create</a>
+                    <a class="nav-link" href="{{ path('show_create') }}">Create Show</a>
                 </li>
                 <li class="nav-item {% if (app.request.attributes.get('_route')) == 'category_create' %}active{%  endif %}">
                     <a class="nav-link" href="{{ path('category_create') }}">Create category</a>
                 </li>
-                <li class="nav-item {% if (app.request.attributes.get('_route')) == 'user_create' %}active{%  endif %}">
-                    <a class="nav-link" href="{{ path('user_create') }}">Create user</a>
-                </li>
-                <li class="nav-item {% if (app.request.attributes.get('_route')) == 'user_list' %}active{%  endif %}">
-                    <a class="nav-link" href="{{ path('user_list') }}">List of users</a>
-                </li>
-
+                {% if is_granted('ROLE_ADMIN') %}
+                    <li class="nav-item {% if (app.request.attributes.get('_route')) == 'user_create' %}active{%  endif %}">
+                        <a class="nav-link" href="{{ path('user_create') }}">Create user</a>
+                    </li>
+                    <li class="nav-item {% if (app.request.attributes.get('_route')) == 'user_list' %}active{%  endif %}">
+                        <a class="nav-link" href="{{ path('user_list') }}">List of users</a>
+                    </li>
+                {% endif %}
                 {% if app.user %}
                     <li class="nav-item {% if (app.request.attributes.get('_route')) == 'security_logout' %}active{%  endif %}">
                         <a class="nav-link" href="{{ path('security_logout') }}">Logout</a>
