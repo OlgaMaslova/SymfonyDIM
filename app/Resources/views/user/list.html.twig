@@ -1,0 +1,27 @@
+{% extends "show/base.html.twig" %}
+{% block pageHeading %}
+    List of users
+{% endblock %}
+
+{% block content %}
+    <table class="table">
+        <thread>
+            <tr>
+                <th scope="col">#</th>
+                <th scope="col">Fullname</th>
+                <th scope="col">Email</th>
+                <th scope="col">Roles</th>
+            </tr>
+        </thread>
+        <tbody>
+            {% for index, user in users %}
+                <tr>
+                    <th scope="row">{{ index+1 }}</th>
+                    <td>{{ user.fullname }}</td>
+                    <td>{{ user.username }}</td>
+                    <td>{{ user.roles  | join(', ')}}</td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+{% endblock %}
