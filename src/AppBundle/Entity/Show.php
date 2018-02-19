@@ -12,6 +12,8 @@ use Symfony\Component\Validator\Constraints as Assert;
 
 class Show
 {
+    const DATA_SOURCE_OMDB =  'OMDB';
+    const DATA_SOURCE_DB =  'In local database';
     /**
      * @ORM\Id
      * @ORM\GeneratedValue
@@ -60,6 +62,9 @@ class Show
      */
     private $category;
 
+    /**
+     * @ORM\Column(options = {"default" = "In local database"})
+     */
     private $dbSource;
 
 

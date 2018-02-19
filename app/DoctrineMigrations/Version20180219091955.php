@@ -8,7 +8,7 @@ use Doctrine\DBAL\Schema\Schema;
 /**
  * Auto-generated Migration: Please modify to your needs!
  */
-class Version20180206133129 extends AbstractMigration
+class Version20180219091955 extends AbstractMigration
 {
     /**
      * @param Schema $schema
@@ -16,10 +16,7 @@ class Version20180206133129 extends AbstractMigration
     public function up(Schema $schema)
     {
         // this up() migration is auto-generated, please modify it to your needs
-        $this->abortIf($this->connection->getDatabasePlatform()->getName() !== 'mysql', 'Migration can only be executed safely on \'mysql\'.');
-
-        $this->addSql('CREATE UNIQUE INDEX UNIQ_64C19C15E237E06 ON category (name)');
-        $this->addSql('DROP TABLE category');
+        $this->addSql('UPDATE s_show SET db_source=\'In local database\'');
     }
 
     /**
@@ -28,8 +25,6 @@ class Version20180206133129 extends AbstractMigration
     public function down(Schema $schema)
     {
         // this down() migration is auto-generated, please modify it to your needs
-        $this->abortIf($this->connection->getDatabasePlatform()->getName() !== 'mysql', 'Migration can only be executed safely on \'mysql\'.');
-
-        $this->addSql('DROP INDEX UNIQ_64C19C15E237E06 ON category');
+        $this->addSql('UPDATE s_show SET db_source=\'\'');
     }
 }

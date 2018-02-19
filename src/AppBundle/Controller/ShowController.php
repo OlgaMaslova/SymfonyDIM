@@ -28,14 +28,14 @@ class ShowController extends Controller
 
         if($session->has('query_search_shows')) {
             $shows = $showFinder->searchByName($session->get('query_search_shows'));
-
+/*
             //if the show exists in local database we present only this one
             if ($shows["Local Database"] != null) {
                 $shows = $shows["Local Database"];
             } else {
-                $shows =array(0=>$shows["IMDB API"]);
+                $shows =$shows["IMDB API"];
             }
-
+*/
             $request->getSession()->remove('query_search_shows');
         } else {
             $shows = $showRepository->findAll();
@@ -60,6 +60,7 @@ class ShowController extends Controller
 
             $show->setMainPicture($generatedFileName);
 */
+            $show->setDbSource(Show::DATA_SOURCE_DB);
             $em = $this->getDoctrine()->getManager(); //get Entity Manager (pattern), clear even if uses flush
             $em->persist($show); //Persist  - new record, only flush - object exists already
             $em->flush();
