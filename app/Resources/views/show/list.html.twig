@@ -26,7 +26,7 @@
 
             {%  if show.dbSource == constant('AppBundle\\Entity\\Show::DATA_SOURCE_DB')%}
                 <a href="{{ path('show_update', {'id': show.id}) }}" class="btn btn-primary">Update &rarr;</a>
-                
+
                 <form action="{{ path('show_delete') }}" method="POST">
                     <input type="hidden" name="show_id" value="{{ show.id }}" />
                     <input type="hidden" name="_csrf_token" value="{{ csrf_token('delete_show') }}" />

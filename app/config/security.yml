@@ -2,16 +2,35 @@
 # https://symfony.com/doc/current/security.html
 security:
 
+    encoders:
+        Symfony\Component\Security\Core\User\User: bcrypt
+
     # https://symfony.com/doc/current/security.html#b-configuring-how-users-are-loaded
     providers:
         in_memory:
-            memory: ~
+            memory:
+                users:
+                    olga:
+                        password: '$2y$13$MbFTW/DyftiLQzDvaw3Tx.vnH1HLkOHMkASz74PZ4G3a49KfD9M8y' #test
+                        roles: 'ROLE_USER'
 
     firewalls:
         # disables authentication for assets and the profiler, adapt it according to your needs
         dev:
             pattern: ^/(_(profiler|wdt)|css|images|js)/
             security: false
+
+        login:
+              pattern: ^/login$
+              anonymous: ~
+
+
+        secured_area:
+            pattern: ^/
+            provider: in_memory
+            form_login:
+                login_path: /login
+                check_path: /login_check
 
         main:
             anonymous: ~
