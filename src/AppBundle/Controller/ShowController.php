@@ -8,9 +8,12 @@ use AppBundle\ShowFinder\ShowFinder;
 use AppBundle\Type\ShowType;
 use AppBundle\EventListener\ShowUploadListener;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\File\File;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\Security\Csrf\CsrfToken;
+use Symfony\Component\Security\Csrf\CsrfTokenManagerInterface;
 
 
 /**
@@ -125,7 +128,7 @@ class ShowController extends Controller
      * @Route("/delete", name="delete")
      * @Method({"DELETE"})
      */
-    /*
+
     public function deleteAction(Request $request, CsrfTokenManagerInterface $csrfTokenManager)
     {
         $doctrine = $this->getDoctrine();
@@ -144,5 +147,5 @@ class ShowController extends Controller
         }
         return $this->redirectToRoute('show_list');
     }
-*/
+
 }
