@@ -40,7 +40,7 @@
         </div>
         <div class="card-footer text-muted">
             Created {{ show.releaseDate | date('d/m/y') }} by
-            <a href="#"> {{ show.author }}</a>
+            <a href="#"> {{ show.author.fullname }}</a>
         </div>
     </div>
     {% endfor %}

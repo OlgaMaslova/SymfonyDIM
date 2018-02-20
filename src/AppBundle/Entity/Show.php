@@ -5,12 +5,13 @@ namespace AppBundle\Entity;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
 
+
 /**
  * @ORM\Entity(repositoryClass="AppBundle\Entity\ShowRepository")
  * @ORM\Table(name="s_show")
  */
 
-class Show
+class Show implements \Serializable
 {
     const DATA_SOURCE_OMDB =  'OMDB';
     const DATA_SOURCE_DB =  'In local database';
@@ -37,7 +38,6 @@ class Show
     private $country;
     /**
      *
-     * @Assert\NotBlank(message = "Please provide author for the show", groups={"create", "update"})
      * @ORM\ManyToOne(targetEntity="User", inversedBy="shows")
      * @ORM\JoinColumn(name="user_id", referencedColumnName="id")
      */
@@ -222,6 +222,15 @@ class Show
         $this->dbSource = $dbSource;
     }
 
+    public function serialize()
+    {
+        // TODO: Implement serialize() method.
+    }
+
+    public function unserialize($serialized)
+    {
+        // TODO: Implement unserialize() method.
+    }
 
 
 }

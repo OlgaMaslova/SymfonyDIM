@@ -58,18 +58,18 @@ class ShowController extends Controller
 
         if ($form->isValid()) {
 
-/*
+            /*
             $generatedFileName = $fileUploader->upload($show->getMainPicture(), $show->getCategory()->getName());
-
             $show->setMainPicture($generatedFileName);
-*/
+            */
             $show->setDbSource(Show::DATA_SOURCE_DB);
+            $show->setAuthor($this->getUser());
+
+            //Passing by ShowUploadListener
             $em = $this->getDoctrine()->getManager(); //get Entity Manager (pattern), clear even if uses flush
             $em->persist($show); //Persist  - new record, only flush - object exists already
             $em->flush();
 
-            // upload file
-            // Save
             $this->addFlash('success', 'You successfully added a new show!');
 
             return $this->redirectToRoute('show_list');

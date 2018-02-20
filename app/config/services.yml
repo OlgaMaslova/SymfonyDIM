@@ -48,4 +48,5 @@ services:
         arguments:
           $client: '@csa_guzzle.client.OMDB_api'
           $apikey: '%OMDB_apikey%'
+          $tokenStorage: '@security.token_storage'
         tags: ['show.finder']

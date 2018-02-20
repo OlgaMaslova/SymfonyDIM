@@ -61,6 +61,11 @@ class User implements UserInterface
         }
     }
 
+    public function getShows()
+    {
+        return $this->shows;
+    }
+
     /**
      * @return mixed
      */

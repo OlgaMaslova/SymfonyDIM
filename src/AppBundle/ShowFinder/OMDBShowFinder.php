@@ -6,7 +6,8 @@ use AppBundle\Entity\Show;
 use AppBundle\File\FileUploader;
 use GuzzleHttp\Client;
 use Symfony\Component\HttpFoundation\File\File;
-use Symfony\Component\Validator\Constraints\DateTime;
+use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorage;
+
 
 class OMDBShowFinder implements ShowFinderInterface
 
@@ -14,11 +15,14 @@ class OMDBShowFinder implements ShowFinderInterface
     private $client;
     private $apikey;
     private $fileUploader;
-    public function __construct(Client $client, $apikey, FileUploader $fileUploader)
+    private $tokenStorage;
+
+    public function __construct(Client $client, $apikey, FileUploader $fileUploader, TokenStorage $tokenStorage)
     {
         $this->client = $client;
         $this->apikey = $apikey;
         $this->fileUploader = $fileUploader;
+        $this->tokenStorage = $tokenStorage;
     }
     /**
      * Find a show by a string
@@ -55,7 +59,7 @@ class OMDBShowFinder implements ShowFinderInterface
         $show->setDbSource(Show::DATA_SOURCE_OMDB);
         $show->setAbstract($json["Plot"]);
         $show->setCategory($category);
-        //$show->setAuthor("Moi"); TODO
+        $show->setAuthor($this->tokenStorage->getToken()->getUser());
         $show->setCountry($json["Country"]);
         $show->setReleaseDate(new \DateTime($json["Released"]));
 
