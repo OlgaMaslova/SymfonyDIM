@@ -3,12 +3,14 @@
 namespace AppBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use JMS\Serializer\Annotation as JMS;
 use Symfony\Component\Validator\Constraints as Assert;
 
 
 /**
  * @ORM\Entity(repositoryClass="AppBundle\Entity\ShowRepository")
  * @ORM\Table(name="s_show")
+ * @JMS\ExclusionPolicy("all")
  */
 
 class Show implements \Serializable
@@ -19,32 +21,44 @@ class Show implements \Serializable
      * @ORM\Id
      * @ORM\GeneratedValue
      * @ORM\Column(type="integer")
+     * @JMS\Expose
+     * @JMS\Groups({"show"})
      */
     private $id;
     /**
      * @ORM\Column
      * @Assert\NotBlank(message = "Please provide name for the show", groups={"create", "update"})
+     * @JMS\Expose
+     * @JMS\Groups({"show"})
     */
     private $name;
     /**
      * @ORM\Column(type="text")
      * @Assert\NotBlank(message = "Please provide abstract for the show", groups={"create", "update"})
+     * @JMS\Expose
+     * @JMS\Groups({"show"})
      */
     private $abstract;
     /**
      * @ORM\Column
      * @Assert\NotBlank(message = "Please provide country for the show", groups={"create", "update"})
+     * @JMS\Expose
+     * @JMS\Groups({"show"})
      */
     private $country;
     /**
      *
      * @ORM\ManyToOne(targetEntity="User", inversedBy="shows")
      * @ORM\JoinColumn(name="user_id", referencedColumnName="id")
+     * @JMS\Expose
+     * @JMS\Groups({"show"})
      */
     private $author;
     /**
      * @ORM\Column(type="date")
      * @Assert\NotBlank(message = "Please provide release date for the show", groups={"create", "update"})
+     * @JMS\Expose
+     * @JMS\Groups({"show"})
      */
     private $releaseDate;
     /**
@@ -61,11 +75,13 @@ class Show implements \Serializable
      * @ORM\ManyToOne(targetEntity="Category")
      * @ORM\JoinColumn(name="category_id", referencedColumnName="id")
      * @Assert\NotBlank(message = "Please provide category for the show", groups={"create", "update"})
+     * @JMS\Expose
      */
     private $category;
 
     /**
      * @ORM\Column(options = {"default" = "In local database"})
+     * @JMS\Expose
      */
     private $dbSource;
 

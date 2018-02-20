@@ -3,11 +3,13 @@
 namespace AppBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use JMS\Serializer\Annotation as JMS;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 
 /**
  * @ORM\Entity
  * @UniqueEntity("name", message="{{ value }} is already in database")
+ * @JMS\ExclusionPolicy("all")
  */
 
 class Category
@@ -21,6 +23,7 @@ class Category
 
     /**
      * @ORM\Column(type="string", unique=true)
+     * @JMS\Expose
      */
     private $name;
 
