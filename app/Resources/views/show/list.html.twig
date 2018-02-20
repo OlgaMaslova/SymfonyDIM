@@ -21,19 +21,22 @@
         #}
 
         <div class="card-body">
-            <h2 class="card-title">{{ show.name ~ ' ' ~ show.dbSource}}</h2>
+            <h2 class="card-title">{{ show.name ~ ' (' ~ show.dbSource ~ ')'}}</h2>
             <p class="card-text">{{ show.abstract }}</p>
 
             {%  if show.dbSource == constant('AppBundle\\Entity\\Show::DATA_SOURCE_DB')%}
-                <a href="{{ path('show_update', {'id': show.id}) }}" class="btn btn-primary">Update &rarr;</a>
 
-                <form action="{{ path('show_delete') }}" method="POST">
-                    <input type="hidden" name="show_id" value="{{ show.id }}" />
-                    <input type="hidden" name="_csrf_token" value="{{ csrf_token('delete_show') }}" />
-                    <input type="hidden" name="_method" value="DELETE" />
+                {% if is_granted('NOT USED', show) %}
+                    <a href="{{ path('show_update', {'id': show.id}) }}" class="btn btn-primary">Update &rarr;</a>
 
-                    <button type="submit" class="btn btn-danger">Delete x</button>
-                </form>
+                    <form action="{{ path('show_delete') }}" method="POST">
+                        <input type="hidden" name="show_id" value="{{ show.id }}" />
+                        <input type="hidden" name="_csrf_token" value="{{ csrf_token('delete_show') }}" />
+                        <input type="hidden" name="_method" value="DELETE" />
+
+                        <button type="submit" class="btn btn-danger">Delete x</button>
+                    </form>
+                {% endif %}
 
             {% endif %}
 

@@ -50,3 +50,9 @@ services:
           $apikey: '%OMDB_apikey%'
           $tokenStorage: '@security.token_storage'
         tags: ['show.finder']
+
+    AppBundle\Security\Authorization\ShowVoter:
+        tags: ['security.voter']
+
+    AppBundle\Security\Authorization\UserVoter:
+            tags: ['security.voter']

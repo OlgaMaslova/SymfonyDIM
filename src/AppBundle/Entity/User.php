@@ -21,16 +21,22 @@ class User implements UserInterface
      * @ORM\Column(type="integer")
      */
     private $id;
+
     /**
      * @ORM\Column(type="string", length=255)
      */
     private $fullname;
 
+    /**
+     * @ORM\Column(type="json_array")
+     */
     private $roles;
+
     /**
      * @ORM\Column
      */
     private $password;
+
     /**
      * @ORM\Column
      *
@@ -83,7 +89,12 @@ class User implements UserInterface
 
     public function getRoles()
     {
-        return ['ROLE_USER', 'ROLE_ADMIN'];
+        return $this->roles;
+    }
+
+    public function setRoles($roles)
+    {
+        $this->roles = $roles;
     }
 
     public function getPassword()

@@ -14,7 +14,10 @@ class UserController extends Controller
     /**
      * @Route("/create", name="create")
      */
-    public function createAction(Request $request, EncoderFactoryInterface $encoderFactory){
+    public function createAction(Request $request, EncoderFactoryInterface $encoderFactory)
+    {
+        $this->denyAccessUnlessGranted('ROLE_ADMIN', null, 'You have no rights!');
+
         $user = new User();
         $userForm = $this->createForm(UserType::class, $user);
         $userForm->handleRequest($request);

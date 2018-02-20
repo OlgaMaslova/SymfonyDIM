@@ -1,6 +1,7 @@
 <?php
 namespace AppBundle\Type;
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\CallbackTransformer;
 use Symfony\Component\Form\Extension\Core\Type\EmailType;
 use Symfony\Component\Form\Extension\Core\Type\PasswordType;
 use Symfony\Component\Form\Extension\Core\Type\RepeatedType;
@@ -21,6 +22,23 @@ class UserType extends AbstractType
                 'first_options'  => array('label' => 'Password'),
                 'second_options' => array('label' => 'Repeat Password'),
             ])
-            ->add('Save', SubmitType::class);
+            ->add('roles', TextType::class, ['label'=>'Roles separated by commas'])
+            ->add('Save', SubmitType::class)
+        ;
+
+        $builder->get('roles')
+            ->addModelTransformer(new CallbackTransformer(
+                function ($rolesAsArray) {
+                    //From Model to view -| Array to String
+                    if (!empty($rolesAsArray)) {
+                        return implode(', ', $rolesAsArray);
+                    }
+                },
+                function ($rolesAsString) {
+                    //From Model to view -| String to Array
+                    return explode(', ', $rolesAsString);
+                }
+            ))
+        ;
     }
 }
