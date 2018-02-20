@@ -3,10 +3,10 @@
 namespace AppBundle\Controller;
 
 use AppBundle\Entity\Show;
+use AppBundle\EventListener\ShowUploadListener;
 use AppBundle\File\FileUploader;
 use AppBundle\ShowFinder\ShowFinder;
 use AppBundle\Type\ShowType;
-use AppBundle\EventListener\ShowUploadListener;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
