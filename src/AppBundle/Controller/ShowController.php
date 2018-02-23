@@ -31,14 +31,7 @@ class ShowController extends Controller
 
         if($session->has('query_search_shows')) {
             $shows = $showFinder->searchByName($session->get('query_search_shows'));
-/*
-            //if the show exists in local database we present only this one
-            if ($shows["Local Database"] != null) {
-                $shows = $shows["Local Database"];
-            } else {
-                $shows =$shows["IMDB API"];
-            }
-*/
+
             $request->getSession()->remove('query_search_shows');
         } else {
             $shows = $showRepository->findAll();
@@ -128,12 +121,11 @@ class ShowController extends Controller
      * @Route("/delete", name="delete")
      * @Method({"DELETE"})
      */
-
     public function deleteAction(Request $request, CsrfTokenManagerInterface $csrfTokenManager)
     {
         $doctrine = $this->getDoctrine();
         $showId = $request->request->get('show_id');
-        //$show = $this->getDoctrine()->getRepository('AppBundle:Show')->findOneBy(['id' => $showId]);
+
         if (!$show = $doctrine->getRepository('AppBundle:Show')->findOneById($showId)) {
             throw new NotFoundHttpException(sprintf('There is no show with the id %d', $showId));
         }

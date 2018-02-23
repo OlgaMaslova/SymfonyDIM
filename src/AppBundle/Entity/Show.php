@@ -29,53 +29,53 @@ class Show implements \Serializable
      * @ORM\Column
      * @Assert\NotBlank(message = "Please provide name for the show", groups={"create", "update"})
      * @JMS\Expose
-     * @JMS\Groups({"show"})
+     * @JMS\Groups({"show", "show_create", "show_update"})
     */
     private $name;
     /**
      * @ORM\Column(type="text")
      * @Assert\NotBlank(message = "Please provide abstract for the show", groups={"create", "update"})
      * @JMS\Expose
-     * @JMS\Groups({"show"})
+     * @JMS\Groups({"show", "show_create", "show_update"})
      */
     private $abstract;
     /**
      * @ORM\Column
      * @Assert\NotBlank(message = "Please provide country for the show", groups={"create", "update"})
      * @JMS\Expose
-     * @JMS\Groups({"show"})
+     * @JMS\Groups({"show", "show_create", "show_update"})
      */
     private $country;
     /**
      *
-     * @ORM\ManyToOne(targetEntity="User", inversedBy="shows")
+     * @ORM\ManyToOne(targetEntity="User", inversedBy="shows", cascade={"persist"})
      * @ORM\JoinColumn(name="user_id", referencedColumnName="id")
      * @JMS\Expose
-     * @JMS\Groups({"show"})
+     * @JMS\Groups({"show", "show_create"})
      */
     private $author;
     /**
      * @ORM\Column(type="date")
      * @Assert\NotBlank(message = "Please provide release date for the show", groups={"create", "update"})
      * @JMS\Expose
-     * @JMS\Groups({"show"})
+     * @JMS\Groups({"show", "show_create", "show_update"})
      */
     private $releaseDate;
     /**
      * @ORM\Column
      * @Assert\NotBlank(message = "Please provide a picture", groups={"create", "update" })
      * @Assert\Image(minHeight=300, minWidth=750, groups={"create", "update"})
-     *
      */
     private $mainPicture;
 
     private $mainPictureFileName;
 
     /**
-     * @ORM\ManyToOne(targetEntity="Category")
+     * @ORM\ManyToOne(targetEntity="Category", cascade={"persist"})
      * @ORM\JoinColumn(name="category_id", referencedColumnName="id")
      * @Assert\NotBlank(message = "Please provide category for the show", groups={"create", "update"})
      * @JMS\Expose
+     * @JMS\Groups({"show_create", "show_update"})
      */
     private $category;
 
@@ -85,6 +85,18 @@ class Show implements \Serializable
      */
     private $dbSource;
 
+    /**
+     * Update a show
+     * @param a show with new variables
+     */
+    public function update(Show $show)
+    {
+        $this->name = $show->getName();
+        $this->abstract = $show->getAbstract();
+        $this->releaseDate = $show->getReleaseDate();
+        $this->category = $show->getCategory();
+        $this->country = $show->getCountry();
+    }
 
     /**
      * @return mixed

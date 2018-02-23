@@ -26,6 +26,7 @@ class Category
      * @ORM\Column(type="string", unique=true)
      * @Assert\NotBlank
      * @JMS\Expose
+     * @JMS\Groups({"category", "show", "show_create", "show_update"})
      */
     private $name;
 

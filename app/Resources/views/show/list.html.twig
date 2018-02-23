@@ -23,7 +23,7 @@
         <div class="card-body">
             <div>
                 {%  if show.dbSource == constant('AppBundle\\Entity\\Show::DATA_SOURCE_OMDB')%}
-                    <img  src="{{ asset('upload/imdb.gif') }}" alt="IMDB image" height="50px" width="120px" style="float:right;">
+                    <img  src="{{ asset('imdb.gif') }}" alt="IMDB image" height="50px" width="120px" style="float:right;">
                 {% endif %}
                 <h2 class="card-title">{{ show.name }}</h2>
             </div>

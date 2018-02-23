@@ -71,7 +71,6 @@ class OMDBShowFinder implements ShowFinderInterface
             $show->setMainPicture(new File($path));
             $show->setMainPictureFileName('tmp.jpg');
         }
-        //$show->setMainPicture($json["Poster"]);
 
         $shows[]= $show;
 

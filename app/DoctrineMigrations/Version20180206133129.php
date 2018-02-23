@@ -17,7 +17,7 @@ class Version20180206133129 extends AbstractMigration
         $this->abortIf($this->connection->getDatabasePlatform()->getName() !== 'mysql', 'Migration can only be executed safely on \'mysql\'.');
 
         $this->addSql('CREATE UNIQUE INDEX UNIQ_64C19C15E237E06 ON category (name)');
-        $this->addSql('DROP TABLE category');
+
     }
 
     /**

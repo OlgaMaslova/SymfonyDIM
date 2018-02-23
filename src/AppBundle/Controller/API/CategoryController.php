@@ -41,7 +41,9 @@ class CategoryController extends Controller
      */
     public function createAction(Request $request, SerializerInterface $serializer, ValidatorInterface $validator)
     {
-        $category = $serializer->deserialize($request->getContent(), Category::class, 'json');
+        $serializationContext = DeserializationContext::create();
+
+        $category = $serializer->deserialize($request->getContent(), Category::class, 'json', $serializationContext->setGroups(["category"]));
 
         $constraintValidationList = $validator->validate($category);
 
@@ -62,7 +64,9 @@ class CategoryController extends Controller
      */
     public function updateAction(Category $category, Request $request, SerializerInterface $serializer, ValidatorInterface $validator)
     {
-        $newCategory = $serializer->deserialize($request->getContent(), Category::class, 'json');
+        $serializationContext = DeserializationContext::create();
+
+        $newCategory = $serializer->deserialize($request->getContent(), Category::class, 'json', $serializationContext->setGroups(["category"]));
 
         $constraintValidationList = $validator->validate($newCategory);
 

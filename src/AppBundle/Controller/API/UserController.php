@@ -78,7 +78,34 @@ class UserController extends Controller
             $em->persist($user);
             $em->flush();
 
-            return $this->returnResponse('User created', Response::HTTP_CREATED);
+            return $this->returnResponse('User is created', Response::HTTP_CREATED);
+        }
+
+        return $this->returnResponse($serializer->serialize($constraintValidationList, 'json'), Response::HTTP_BAD_REQUEST);
+    }
+
+    /**
+     * @Method({"PUT"})
+     * @Route("/users/{id}", name="update", requirements={"id"="\d+"})
+     */
+    public function updateAction(User $user, Request $request, SerializerInterface $serializer, ValidatorInterface $validator)
+    {
+        $serializationContext = DeserializationContext::create();
+
+        $newUser = $serializer->deserialize($request->getContent(), User::class, 'json', $serializationContext->setGroups(["user", "user_update"]));
+
+        $newUser->setPassword($user->getPassword());
+
+        $constraintValidationList = $validator->validate($newUser);
+
+
+        if($constraintValidationList->count() == 0) {
+            $newUser->setRoles(explode(', ', $newUser->getRoles()));
+            $user->update($newUser);
+
+            $this->getDoctrine()->getManager()->flush();
+
+            return $this->returnResponse('User is updated', Response::HTTP_OK);
         }
 
         return $this->returnResponse($serializer->serialize($constraintValidationList, 'json'), Response::HTTP_BAD_REQUEST);
