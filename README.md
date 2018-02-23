@@ -13,13 +13,15 @@ Clone the project to your project's folder locally:
 
 `git clone https://github.com/OlgaMaslova/SymfonyDIM.git`
 
-Make composer install the project's dependencies into vendor/
+Make composer install the project's dependencies into vendor/ (to execute on the project's root folder):
 
 `composer install`
 
-Create database with the name indicated in parameters.yml->'database_name'
+Create database with the name indicated in parameters.yml->'database_name' and perform all migrations.
 
 `bin/console doctrine:database:create`
+`bin/console doctrine:migration:migrate`
+
 
 ## Usage
 
