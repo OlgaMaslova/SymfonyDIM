@@ -20,6 +20,7 @@ Make composer install the project's dependencies into vendor/ (to execute on the
 Create database with the name indicated in parameters.yml->'database_name' and perform all migrations.
 
 `bin/console doctrine:database:create`
+
 `bin/console doctrine:migration:migrate`
 
 
