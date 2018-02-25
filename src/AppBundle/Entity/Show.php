@@ -51,7 +51,7 @@ class Show implements \Serializable
      * @ORM\ManyToOne(targetEntity="User", inversedBy="shows", cascade={"persist"})
      * @ORM\JoinColumn(name="user_id", referencedColumnName="id")
      * @JMS\Expose
-     * @JMS\Groups({"show", "show_create"})
+     * @JMS\Groups({"show", "show_create", "show_update"})
      */
     private $author;
     /**
@@ -87,7 +87,7 @@ class Show implements \Serializable
 
     /**
      * Update a show
-     * @param a show with new variables
+     * @param Show $show with new variablesto put  in the current show
      */
     public function update(Show $show)
     {
@@ -96,6 +96,25 @@ class Show implements \Serializable
         $this->releaseDate = $show->getReleaseDate();
         $this->category = $show->getCategory();
         $this->country = $show->getCountry();
+        $this->setMainPicture($show->getMainPictureFileName());
+        $this->setDbSource(Show::DATA_SOURCE_DB);
+    }
+
+    /**
+     * This function sets the Main picture from the provided local path
+     * @param : array $json, FileUploader $fileUploader, Show $show
+     *
+     */
+    public function setMainPictureFromPath($json, $fileUploader)
+    {
+        //Upload the picture
+        $image =  new UploadedFile($json['path'], $json['filename'], 'image/jpeg',null,null,true);
+
+        $fileName = $fileUploader->upload($image, $this->getCategory()->getName());
+
+        $this->setMainPictureFileName($fileName);
+        //For validation we need to set a file in mainPicture
+        $this->setMainPicture(new File($fileUploader->getUploadDirectoryPath() . '/' . $fileName));
     }
 
     /**

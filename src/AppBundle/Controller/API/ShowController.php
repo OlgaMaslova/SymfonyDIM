@@ -63,32 +63,15 @@ class ShowController extends Controller
 
         $json = json_decode($request->getContent(), true);
 
-        //Upload the picture
-        $image =  new UploadedFile( $json['path'], $json['filename'], 'image/jpeg',null,null,true);
-
-        $fileName = $fileUploader->upload($image, $show->getCategory()->getName());
-
-        $show->setMainPictureFileName($fileName);
-        //For validation
-        $show->setMainPicture(new File($fileUploader->getUploadDirectoryPath().'/'.$fileName));
+        $show->setMainPictureFromPath($json, $fileUploader);
 
         $constraintValidationList = $validator->validate($show, null, ["create"]);
 
         if($constraintValidationList->count() == 0) {
+            $this->setCategory($show);
+
             //Get the author if he exists
-
             $author = $this->getDoctrine()->getRepository('AppBundle:User')->findBy(array('fullname' => $show->getAuthor()->getFullname()));
-
-            $category = $this->getDoctrine()->getManager()->getRepository('AppBundle\Entity\Category')->findBy(array('name' => $show->getCategory()->getName()));
-
-            //Create new Category to persist if needed
-            if ($category === []) {
-                $newCategory = new Category();
-                $newCategory->setName($show->getCategory()->getName());
-                $show->setCategory($newCategory);
-            } else {
-                $show->setCategory($category[0]);
-            }
 
             if ($author != []) {
                 $show->setDbSource(Show::DATA_SOURCE_DB);
@@ -97,9 +80,9 @@ class ShowController extends Controller
                 $em = $this->getDoctrine()->getManager();
                 $em->persist($show);
                 $em->flush();
+                return $this->returnResponse('Show is created', Response::HTTP_CREATED);
             }
-
-            return $this->returnResponse('Show is created', Response::HTTP_CREATED);
+            return $this->returnResponse('Author not found', Response::HTTP_BAD_REQUEST);
         }
 
         return $this->returnResponse($serializer->serialize($constraintValidationList, 'json'), Response::HTTP_BAD_REQUEST);
@@ -109,28 +92,41 @@ class ShowController extends Controller
      * @Method({"PUT"})
      * @Route("/shows/{id}", name="update", requirements={"id"="\d+"})
      */
-    public function updateAction(Show $show, Request $request, SerializerInterface $serializer, ValidatorInterface $validator)
+    public function updateAction(Show $show, Request $request, SerializerInterface $serializer, ValidatorInterface $validator, FileUploader $fileUploader)
     {
         $serializationContext = DeserializationContext::create();
 
         $newShow = $serializer->deserialize($request->getContent(), Show::class, 'json', $serializationContext->setGroups(["show_update"]));
 
-        $constraintValidationList = $validator->validate($newShow);
+        $newShow->setReleaseDate(new \DateTime($newShow->getReleaseDate()));
+
+        $json = json_decode($request->getContent(), true);
+
+        if(isset($json['path']) && isset($json['filename'])) {
+            //the path is provided->set new picture
+            $newShow->setMainPictureFromPath($json, $fileUploader);
+        } else {
+            //Set the existing picture in the show
+            $newShow->setMainPicture($show->getMainPicture());
+            $newShow->setMainPictureFilename($show->getMainPictureFileName());
+        }
+
+        $constraintValidationList = $validator->validate($newShow, null, ["update"]);
 
         if($constraintValidationList->count() == 0) {
 
-            //Check if the category exists, then update
-            $categories = $this->getDoctrine()->getManager()->getRepository('AppBundle\Entity\Category')->findAll();
-            dump($newShow);die;
-            if (in_array($newShow->getCategory(), $categories)) {
+            $this->setCategory($newShow);
+
+            //Get the author and update if he exists
+            $author = $this->getDoctrine()->getRepository('AppBundle:User')->findBy(array('fullname' => $newShow->getAuthor()->getFullname()));
+
+            if ($author != []) {
+                $show->setAuthor($author[0]);
                 $show->update($newShow);
-
                 $this->getDoctrine()->getManager()->flush();
-
                 return $this->returnResponse('Show is updated', Response::HTTP_OK);
-            } else {
-                return $this->returnResponse('Category does not exist', Response::HTTP_BAD_REQUEST);
             }
+            return $this->returnResponse('Author not found', Response::HTTP_BAD_REQUEST);
         }
 
         return $this->returnResponse($serializer->serialize($constraintValidationList, 'json'), Response::HTTP_BAD_REQUEST);
@@ -149,4 +145,21 @@ class ShowController extends Controller
         return $this->returnResponse('Show is deleted', Response::HTTP_OK);
     }
 
+    /**
+     * Create or validate existing category for a show
+     * @param $show
+     */
+    public function setCategory($show)
+    {
+        $category = $this->getDoctrine()->getManager()->getRepository('AppBundle\Entity\Category')->findBy(array('name' => $show->getCategory()->getName()));
+
+        //Create new Category to persist if needed
+        if ($category === []) {
+            $newCategory = new Category();
+            $newCategory->setName($show->getCategory()->getName());
+            $show->setCategory($newCategory);
+        } else {
+            $show->setCategory($category[0]);
+        }
+    }
 }
