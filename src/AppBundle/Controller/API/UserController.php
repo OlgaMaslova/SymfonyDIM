@@ -44,6 +44,15 @@ class UserController extends Controller
     /**
      * @Method({"GET"})
      * @Route("/users/{id}", name="get", requirements={"id"="\d+"})
+     *
+     * @SWG\Response(
+     *     response=200,
+     *     description="Returns the user by his id",
+     *     @SWG\Schema(
+     *         type="array",
+     *         @Model(type=User::class)
+     *     )
+     * )
      */
     public function getAction(User $user, SerializerInterface $serializer)
     {
@@ -55,6 +64,47 @@ class UserController extends Controller
     /**
      * @Method({"POST"})
      * @Route("/users", name="create")
+     *
+     *
+     * @SWG\Parameter(
+     *       name="body",
+     *       in="body",
+     *       description="json order object",
+     *       type="json",
+     *       required=true,
+     *     @SWG\Schema(
+     *        type="object",
+     *           @SWG\Property(
+     *                type="string",
+     *                property="fullname",
+     *
+     *                example="Toto"
+     *              ),
+     *           @SWG\Property(
+     *                type="string",
+     *                property="roles",
+     *                example="ROLE_USER, ROLE_ADMIN"
+     *              ),
+     *          @SWG\Property(
+     *                type="string",
+     *                property="password",
+     *                example="test"
+     *              ),
+     *          @SWG\Property(
+     *                type="string",
+     *                property="email",
+     *                example="toto@mail.com"
+     *              ),
+     *     ),
+     *  ),
+     *  @SWG\Response(
+     *       response=201,
+     *       description="User is created"
+     *    ),
+     *  @SWG\Response(
+     *     response=404,
+     *     description="Validation error"
+     *    )
      */
     public function createAction(Request $request, SerializerInterface $serializer, ValidatorInterface $validator, EncoderFactoryInterface $encoderFactory)
     {
@@ -62,7 +112,6 @@ class UserController extends Controller
 
         $user = $serializer->deserialize($request->getContent(), User::class, 'json', $serializationContext->setGroups(["user_create", "user"]));
 
-        //dump($user);die;
 
         $constraintValidationList = $validator->validate($user);
 
@@ -109,6 +158,18 @@ class UserController extends Controller
         }
 
         return $this->returnResponse($serializer->serialize($constraintValidationList, 'json'), Response::HTTP_BAD_REQUEST);
+    }
+    /**
+     * @Method({"DELETE"})
+     * @Route("/users/{id}", name="delete", requirements={"id"="\d+"})
+     */
+    public function deleteAction(User $user)
+    {
+        //deletes also all shows created by the user
+        $em = $this->getDoctrine()->getManager();
+        $em->remove($user);
+        $em->flush();
+        return $this->returnResponse('User is deleted', Response::HTTP_OK);
     }
 
 }
