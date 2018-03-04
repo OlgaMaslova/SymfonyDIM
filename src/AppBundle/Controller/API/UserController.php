@@ -24,13 +24,17 @@ class UserController extends Controller
      * @Method({"GET"})
      * @Route("/users", name="list")
      *
-     * @SWG\Response(
-     *     response=200,
-     *     description="Returns the list of users",
-     *     @SWG\Schema(
-     *         type="array",
-     *         @Model(type=User::class)
-     *     )
+     * @SWG\Get(
+     *      path="/api/users",
+     *      summary="Returns the list of users",
+     *      @SWG\Response(
+     *          response=200,
+     *          description="Returns the list of users",
+     *          @SWG\Schema(
+     *              type="array",
+     *              @Model(type=User::class)
+     *          )
+     *      )
      * )
      */
     public function listAction(SerializerInterface $serializer)
@@ -45,13 +49,17 @@ class UserController extends Controller
      * @Method({"GET"})
      * @Route("/users/{id}", name="get", requirements={"id"="\d+"})
      *
-     * @SWG\Response(
-     *     response=200,
-     *     description="Returns the user by his id",
-     *     @SWG\Schema(
-     *         type="array",
-     *         @Model(type=User::class)
-     *     )
+     * @SWG\Get(
+     *      path="/api/users/{id}",
+     *      summary="Returns the user by his id",
+     *      @SWG\Response(
+     *          response=200,
+     *          description="Returns the user by his id",
+     *          @SWG\Schema(
+     *              type="array",
+     *              @Model(type=User::class)
+     *          )
+     *      )
      * )
      */
     public function getAction(User $user, SerializerInterface $serializer)
@@ -66,45 +74,49 @@ class UserController extends Controller
      * @Route("/users", name="create")
      *
      *
-     * @SWG\Parameter(
-     *       name="body",
-     *       in="body",
-     *       description="json order object",
-     *       type="json",
-     *       required=true,
-     *     @SWG\Schema(
-     *        type="object",
-     *           @SWG\Property(
+     * @SWG\Post(
+     *      path="/api/users",
+     *      summary="Creates a new user",
+     *      @SWG\Parameter(
+     *           name="JSON create body",
+     *           in="body",
+     *           description="json request object",
+     *           type="json",
+     *           required=true,
+     *           @SWG\Schema(
+     *              type="object",
+     *              @SWG\Property(
      *                type="string",
      *                property="fullname",
-     *
      *                example="Toto"
      *              ),
-     *           @SWG\Property(
+     *              @SWG\Property(
      *                type="string",
      *                property="roles",
-     *                example="ROLE_USER, ROLE_ADMIN"
+     *                example="ROLE_USER, ROLE_ADMIN",
+     *                description="roles separated by commas"
      *              ),
-     *          @SWG\Property(
+     *              @SWG\Property(
      *                type="string",
      *                property="password",
      *                example="test"
      *              ),
-     *          @SWG\Property(
+     *              @SWG\Property(
      *                type="string",
      *                property="email",
      *                example="toto@mail.com"
      *              ),
-     *     ),
-     *  ),
-     *  @SWG\Response(
-     *       response=201,
-     *       description="User is created"
-     *    ),
-     *  @SWG\Response(
-     *     response=404,
-     *     description="Validation error"
-     *    )
+     *           ),
+     *      ),
+     *      @SWG\Response(
+     *          response=201,
+     *          description="User is created"
+     *      ),
+     *      @SWG\Response(
+     *          response=404,
+     *          description="Validation error"
+     *      )
+     * )
      */
     public function createAction(Request $request, SerializerInterface $serializer, ValidatorInterface $validator, EncoderFactoryInterface $encoderFactory)
     {
@@ -136,6 +148,50 @@ class UserController extends Controller
     /**
      * @Method({"PUT"})
      * @Route("/users/{id}", name="update", requirements={"id"="\d+"})
+     *
+     * @SWG\Put(
+     *     path="/api/users/{id}",
+     *     summary="Updates a user by its id",
+     *     @SWG\Parameter(
+     *             name="JSON update body",
+     *             in="body",
+     *             description="json request object",
+     *             type="json",
+     *             required=true,
+     *             @SWG\Schema(
+     *                type="object",
+     *                   @SWG\Property(
+     *                        type="string",
+     *                        property="fullname",
+     *                        example="Toto"
+     *                   ),
+     *                   @SWG\Property(
+     *                        type="string",
+     *                        property="roles",
+     *                        example="ROLE_USER, ROLE_ADMIN",
+     *                        description="roles separated by commas"
+     *                   ),
+     *                   @SWG\Property(
+     *                        type="string",
+     *                        property="password",
+     *                        example="test"
+     *                   ),
+     *                   @SWG\Property(
+     *                        type="string",
+     *                        property="email",
+     *                        example="toto@mail.com"
+     *                   ),
+     *            ),
+     *     ),
+     *     @SWG\Response(
+     *          response=200,
+     *          description="User is updated"
+     *     ),
+     *     @SWG\Response(
+     *          response=404,
+     *          description="Validation error"
+     *     )
+     * )
      */
     public function updateAction(User $user, Request $request, SerializerInterface $serializer, ValidatorInterface $validator)
     {
@@ -162,6 +218,19 @@ class UserController extends Controller
     /**
      * @Method({"DELETE"})
      * @Route("/users/{id}", name="delete", requirements={"id"="\d+"})
+     *
+     * @SWG\Delete(
+     *      path="/api/users/{id}",
+     *      summary="Deletes the user by his id",
+     *      @SWG\Response(
+     *        response=200,
+     *        description="User is deleted"
+     *      ),
+     *     @SWG\Response(
+     *       response=404,
+     *       description="Error"
+     *     )
+     * )
      */
     public function deleteAction(User $user)
     {

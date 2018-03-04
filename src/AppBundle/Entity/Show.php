@@ -75,7 +75,7 @@ class Show implements \Serializable
      * @ORM\JoinColumn(name="category_id", referencedColumnName="id")
      * @Assert\NotBlank(message = "Please provide category for the show", groups={"create", "update"})
      * @JMS\Expose
-     * @JMS\Groups({"show_create", "show_update"})
+     * @JMS\Groups({"show", "show_create", "show_update"})
      */
     private $category;
 
