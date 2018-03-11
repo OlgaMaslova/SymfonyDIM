@@ -29,6 +29,10 @@ security:
               pattern: ^/login$
               anonymous: ~
 
+        createFirst:
+              pattern: ^/user/create/first
+              anonymous: ~
+
         api:
             pattern: ^/api
             anonymous: ~
