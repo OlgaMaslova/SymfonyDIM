@@ -10,7 +10,6 @@ use AppBundle\Type\ShowType;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
-use Symfony\Component\HttpFoundation\File\File;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Security\Csrf\CsrfToken;
 use Symfony\Component\Security\Csrf\CsrfTokenManagerInterface;
@@ -51,10 +50,6 @@ class ShowController extends Controller
 
         if ($form->isValid()) {
 
-            /*
-            $generatedFileName = $fileUploader->upload($show->getMainPicture(), $show->getCategory()->getName());
-            $show->setMainPicture($generatedFileName);
-            */
             $show->setDbSource(Show::DATA_SOURCE_DB);
             $show->setAuthor($this->getUser());
 
@@ -81,13 +76,8 @@ class ShowController extends Controller
 
         if ($showForm->isValid())
         {
-/*
-            $generatedFileName = $fileUploader->upload($show->getMainPicture(), $show->getCategory()->getName());
-
-            $show->setMainPicture($generatedFileName);
-*/
-            $em = $this->getDoctrine()->getManager(); //get Entity Manager (pattern), clear even if uses flush
-            $em->persist($show); //Persist  - new record, only flush - object exists already
+            $em = $this->getDoctrine()->getManager();
+            $em->persist($show);
             $em->flush();
 
             $this->addFlash('success', 'You successfully updated the show!');

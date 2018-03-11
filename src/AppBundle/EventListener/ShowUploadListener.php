@@ -35,7 +35,7 @@ class ShowUploadListener
 
     private function uploadFile($entity)
     {
-        // upload only works for Product entities
+        // upload only works for Show entities
         if (!$entity instanceof Show) {
             return;
         }
@@ -56,7 +56,7 @@ class ShowUploadListener
         if (!$entity instanceof Show) {
             return;
         }
-
+        //save the mainPicture filename in mainPicture property for DB
         if ($fileName = $entity->getMainPicture()) {
             $entity->setMainPictureFileName($fileName);
             $entity->setMainPicture(new File($this->fileUploader->getUploadDirectoryPath().'/'.$fileName));

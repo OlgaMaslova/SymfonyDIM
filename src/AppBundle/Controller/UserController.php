@@ -38,6 +38,8 @@ class UserController extends Controller
     }
     /**
      * @Route("/create/first", name="create_first")
+     *
+     * Helper function to create a very first user (bypassing the firewall and access permission for Admin)
      */
     public function createFirstAction(Request $request, EncoderFactoryInterface $encoderFactory)
     {
