@@ -37,6 +37,8 @@ class CategoryController extends Controller
      */
     public function listAction(SerializerInterface $serializer)
     {
+        throw new \Exception("ouch");
+
         $categories = $this->getDoctrine()->getRepository('AppBundle:Category')->findAll();
 
         return $this->returnResponse($serializer->serialize($categories, 'json'), Response::HTTP_OK);

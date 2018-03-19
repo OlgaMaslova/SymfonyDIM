@@ -87,7 +87,7 @@ class Show implements \Serializable
 
     /**
      * Update a show
-     * @param Show $show with new variablesto put  in the current show
+     * @param Show $show with new variables to put  in the current show
      */
     public function update(Show $show)
     {

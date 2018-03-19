@@ -6,6 +6,7 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
+use Symfony\Component\Security\Core\Encoder\EncoderFactoryInterface;
 use Symfony\Component\Security\Core\Exception\AuthenticationException;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Security\Core\User\UserProviderInterface;
@@ -13,7 +14,12 @@ use Symfony\Component\Security\Guard\AbstractGuardAuthenticator;
 
 class ApiUserPasswordAuthenticator extends AbstractGuardAuthenticator
 {
+    private $encoderFactory;
 
+    public function __construct(EncoderFactoryInterface $encoderFactory)
+    {
+        $this->encoderFactory = $encoderFactory;
+    }
 
     /**
      * Returns a response that directs the user to authenticate.
@@ -72,11 +78,15 @@ class ApiUserPasswordAuthenticator extends AbstractGuardAuthenticator
      */
     public function checkCredentials($credentials, UserInterface $user)
     {
-        die('checkCredentials');
-        // Get the encoder factory
-        // Get the encoder
-        // hash the password
-        // compare $user->getPassword() and $passwordHashed
+
+        $encoder = $this->encoderFactory->getEncoder($user);
+
+        //dump($hashedPassword, $user->getPassword());die();
+        if ($encoder->isPasswordValid($user->getPassword(), $credentials['password'], null)) {
+            return true;
+        }
+
+        throw new AuthenticationException("Authentication failed");
     }
 
     /**

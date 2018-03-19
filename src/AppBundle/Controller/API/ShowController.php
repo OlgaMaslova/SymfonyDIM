@@ -268,10 +268,9 @@ class ShowController extends Controller
 
         $newShow = $serializer->deserialize($request->getContent(), Show::class, 'json', $serializationContext->setGroups(["show_update"]));
 
-        $newShow->setReleaseDate(new \DateTime($newShow->getReleaseDate()));
-
         $json = json_decode($request->getContent(), true);
 
+        //Getting the picture from local path
         if(isset($json['path']) && isset($json['filename'])) {
             //the path is provided->set new picture
             $newShow->setMainPictureFromPath($json, $fileUploader);
