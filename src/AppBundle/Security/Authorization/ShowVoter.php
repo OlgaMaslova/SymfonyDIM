@@ -36,7 +36,7 @@ class ShowVoter extends Voter
      *
      * @return bool
      */
-    protected function voteOnAttribute($attribute, $subject, TokenInterface $token)
+    public function voteOnAttribute($attribute, $subject, TokenInterface $token)
     {
         // Get the User => $user
         $user = $token->getUser();

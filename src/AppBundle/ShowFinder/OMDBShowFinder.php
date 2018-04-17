@@ -67,6 +67,7 @@ class OMDBShowFinder implements ShowFinderInterface
         if ($json["Poster"] != "N/A") {
             $image = imagecreatefromjpeg($json["Poster"]);
             $path = $this->fileUploader->getUploadDirectoryPath().'/tmp.jpg';
+            //dump($path);die;
             imagejpeg($image, $path);
             $show->setMainPicture(new File($path));
             $show->setMainPictureFileName('tmp.jpg');
