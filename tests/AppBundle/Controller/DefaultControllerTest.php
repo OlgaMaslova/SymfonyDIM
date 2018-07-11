@@ -6,13 +6,28 @@ use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 
 class DefaultControllerTest extends WebTestCase
 {
+    private $client;
+
     public function testIndex()
     {
-        $client = static::createClient();
+        $crawler = $this->client->request('GET', '/');
 
-        $crawler = $client->request('GET', '/');
+        $this->assertEquals(302, $this->client->getResponse()->getStatusCode());
+        $crawler = $this->client->followRedirect();
 
-        $this->assertEquals(200, $client->getResponse()->getStatusCode());
-        $this->assertContains('Welcome to Symfony', $crawler->filter('#container h1')->text());
+        $this->assertContains('Welcome!', $crawler->filter('h1')->text());
+
+        $crawler=$this->client->back();
+        $this->assertEquals(302, $this->client->getResponse()->getStatusCode());
+    }
+
+    public function setUp()
+    {
+        $this->client = static::createClient();
+    }
+
+    public function tearDown()
+    {
+        $this->client = null;
     }
 }

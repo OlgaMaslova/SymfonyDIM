@@ -29,9 +29,21 @@ security:
               pattern: ^/login$
               anonymous: ~
 
+        createFirst:
+              pattern: ^/user/create/first
+              anonymous: ~
+
+        api_doc:
+            pattern: ^/api/doc$
+            anonymous: ~
+
         api:
             pattern: ^/api
-            anonymous: ~
+            stateless: true
+            provider: database
+            guard:
+              authenticators:
+                  -  AppBundle\Security\Authentication\ApiUserPasswordAuthenticator
 
         secured_area:
             pattern: ^/

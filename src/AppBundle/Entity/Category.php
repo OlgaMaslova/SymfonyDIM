@@ -19,6 +19,9 @@ class Category
      * @ORM\Id
      * @ORM\GeneratedValue
      * @ORM\Column(type="integer")
+     *
+     * @JMS\Expose
+     * @JMS\Groups({"category"})
      */
     private $id;
 
@@ -26,6 +29,7 @@ class Category
      * @ORM\Column(type="string", unique=true)
      * @Assert\NotBlank
      * @JMS\Expose
+     * @JMS\Groups({"category", "show", "show_create", "show_update", "category_create"})
      */
     private $name;
 

@@ -10,7 +10,6 @@ use AppBundle\Type\ShowType;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
-use Symfony\Component\HttpFoundation\File\File;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Security\Csrf\CsrfToken;
 use Symfony\Component\Security\Csrf\CsrfTokenManagerInterface;
@@ -31,14 +30,7 @@ class ShowController extends Controller
 
         if($session->has('query_search_shows')) {
             $shows = $showFinder->searchByName($session->get('query_search_shows'));
-/*
-            //if the show exists in local database we present only this one
-            if ($shows["Local Database"] != null) {
-                $shows = $shows["Local Database"];
-            } else {
-                $shows =$shows["IMDB API"];
-            }
-*/
+
             $request->getSession()->remove('query_search_shows');
         } else {
             $shows = $showRepository->findAll();
@@ -58,10 +50,6 @@ class ShowController extends Controller
 
         if ($form->isValid()) {
 
-            /*
-            $generatedFileName = $fileUploader->upload($show->getMainPicture(), $show->getCategory()->getName());
-            $show->setMainPicture($generatedFileName);
-            */
             $show->setDbSource(Show::DATA_SOURCE_DB);
             $show->setAuthor($this->getUser());
 
@@ -88,13 +76,8 @@ class ShowController extends Controller
 
         if ($showForm->isValid())
         {
-/*
-            $generatedFileName = $fileUploader->upload($show->getMainPicture(), $show->getCategory()->getName());
-
-            $show->setMainPicture($generatedFileName);
-*/
-            $em = $this->getDoctrine()->getManager(); //get Entity Manager (pattern), clear even if uses flush
-            $em->persist($show); //Persist  - new record, only flush - object exists already
+            $em = $this->getDoctrine()->getManager();
+            $em->persist($show);
             $em->flush();
 
             $this->addFlash('success', 'You successfully updated the show!');
@@ -128,12 +111,11 @@ class ShowController extends Controller
      * @Route("/delete", name="delete")
      * @Method({"DELETE"})
      */
-
     public function deleteAction(Request $request, CsrfTokenManagerInterface $csrfTokenManager)
     {
         $doctrine = $this->getDoctrine();
         $showId = $request->request->get('show_id');
-        //$show = $this->getDoctrine()->getRepository('AppBundle:Show')->findOneBy(['id' => $showId]);
+
         if (!$show = $doctrine->getRepository('AppBundle:Show')->findOneById($showId)) {
             throw new NotFoundHttpException(sprintf('There is no show with the id %d', $showId));
         }

@@ -31,9 +31,10 @@ class User implements UserInterface
 
     /**
      * @ORM\Column(type="string", length=255)
+     * @Assert\NotBlank
      *
      * @JMS\Expose
-     * @JMS\Groups({"user", "show"})
+     * @JMS\Groups({"user", "show", "show_create", "show_update"})
      */
     private $fullname;
 
@@ -41,7 +42,7 @@ class User implements UserInterface
      * @ORM\Column(type="json_array")
      *
      * @JMS\Expose
-     * @JMS\Groups({"user_create"})
+     * @JMS\Groups({"user_create", "user_update"})
      * @JMS\Type("string")
      */
     private $roles;
@@ -66,13 +67,20 @@ class User implements UserInterface
      */
     private $email;
     /**
-     * @ORM\OneToMany(targetEntity="Show", mappedBy="author")
+     * @ORM\OneToMany(targetEntity="Show", mappedBy="author", cascade={"remove"})
      */
     private $shows;
 
     public function __construct()
     {
         $this->shows = new ArrayCollection();
+    }
+
+    public function update(User $user)
+    {
+        $this->email = $user->getUsername();
+        $this->fullname = $user->getFullname();
+        $this->roles = $user->getRoles();
     }
 
     public function addShow(Show $show)
